@@ -1,0 +1,9 @@
+{
+	"name": "ws-adf-proyecto-final-de-azure-taylor-asprilla",
+	"location": "eastus",
+	"identity": {
+		"type": "SystemAssigned",
+		"principalId": "91561381-2ceb-4c47-83f5-6482668d0856",
+		"tenantId": "ab276e7f-97a1-4d6f-bab3-3622a61b49bb"
+	}
+}

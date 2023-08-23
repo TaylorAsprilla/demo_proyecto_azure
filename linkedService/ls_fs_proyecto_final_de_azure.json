@@ -1,0 +1,17 @@
+{
+	"name": "ls_fs_proyecto_final_de_azure",
+	"type": "Microsoft.DataFactory/factories/linkedservices",
+	"properties": {
+		"annotations": [],
+		"type": "FileServer",
+		"typeProperties": {
+			"host": "D:\\Taylor\\Cursos\\Ingeniería de datos con Azure Microsoft\\Clase 5\\Entrega #2\\data",
+			"userId": "Taylor",
+			"encryptedCredential": "eyJDcmVkZW50aWFsSWQiOiJiMmY2OGY1Yy1lM2NmLTQwNTUtYTAwOC04ZTFiZjg3NTQxODYiLCJWZXJzaW9uIjoiMi4wIiwiQ2xhc3NUeXBlIjoiTWljcm9zb2Z0LkRhdGFQcm94eS5Db3JlLkludGVyU2VydmljZURhdGFDb250cmFjdC5DcmVkZW50aWFsU1UwNkNZMTQifQ=="
+		},
+		"connectVia": {
+			"referenceName": "ir-local-machine",
+			"type": "IntegrationRuntimeReference"
+		}
+	}
+}

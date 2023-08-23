@@ -1,0 +1,7 @@
+{
+	"name": "ir-local-machine",
+	"properties": {
+		"type": "SelfHosted",
+		"description": "Integration Rumtine que se conectará a la PC local"
+	}
+}
