@@ -1,0 +1,24 @@
+{
+	"$schema": "https://schema.management.azure.com/schemas/2015-01-01/deploymentParameters.json#",
+	"contentVersion": "1.0.0.0",
+	"parameters": {
+		"factoryName": {
+			"value": "ws-adf-proyecto-final-de-azure-taylor-asprilla"
+		},
+		"ls_adls_proyecto_final_de_azure_accountKey": {
+			"value": ""
+		},
+		"ls_fs_proyecto_final_de_azure_password": {
+			"value": ""
+		},
+		"ls_adls_proyecto_final_de_azure_properties_typeProperties_url": {
+			"value": "https://adlsproyectofinaldeazure.dfs.core.windows.net/"
+		},
+		"ls_fs_proyecto_final_de_azure_properties_typeProperties_host": {
+			"value": "D:\\Taylor\\Cursos\\Ingeniería de datos con Azure Microsoft\\Clase 5\\Entrega #2\\data"
+		},
+		"ls_fs_proyecto_final_de_azure_properties_typeProperties_userId": {
+			"value": "Taylor"
+		}
+	}
+}

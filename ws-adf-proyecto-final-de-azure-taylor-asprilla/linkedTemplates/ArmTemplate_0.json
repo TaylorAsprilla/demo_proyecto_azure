@@ -1,0 +1,379 @@
+{
+	"$schema": "http://schema.management.azure.com/schemas/2015-01-01/deploymentTemplate.json#",
+	"contentVersion": "1.0.0.0",
+	"parameters": {
+		"factoryName": {
+			"type": "string",
+			"metadata": "Nombre de instancia de Data Factory",
+			"defaultValue": "ws-adf-proyecto-final-de-azure-taylor-asprilla"
+		},
+		"ls_adls_proyecto_final_de_azure_accountKey": {
+			"type": "secureString",
+			"metadata": "Cadena protegida para \"accountKey\"de \"ls_adls_proyecto_final_de_azure\""
+		},
+		"ls_fs_proyecto_final_de_azure_password": {
+			"type": "secureString",
+			"metadata": "Cadena protegida para \"password\"de \"ls_fs_proyecto_final_de_azure\""
+		},
+		"ls_adls_proyecto_final_de_azure_properties_typeProperties_url": {
+			"type": "string",
+			"defaultValue": "https://adlsproyectofinaldeazure.dfs.core.windows.net/"
+		},
+		"ls_fs_proyecto_final_de_azure_properties_typeProperties_host": {
+			"type": "string",
+			"defaultValue": "D:\\Taylor\\Cursos\\Ingeniería de datos con Azure Microsoft\\Clase 5\\Entrega #2\\data"
+		},
+		"ls_fs_proyecto_final_de_azure_properties_typeProperties_userId": {
+			"type": "string",
+			"defaultValue": "Taylor"
+		}
+	},
+	"variables": {
+		"factoryId": "[concat('Microsoft.DataFactory/factories/', parameters('factoryName'))]"
+	},
+	"resources": [
+		{
+			"name": "[concat(parameters('factoryName'), '/ls_adls_proyecto_final_de_azure')]",
+			"type": "Microsoft.DataFactory/factories/linkedServices",
+			"apiVersion": "2018-06-01",
+			"properties": {
+				"annotations": [],
+				"type": "AzureBlobFS",
+				"typeProperties": {
+					"url": "[parameters('ls_adls_proyecto_final_de_azure_properties_typeProperties_url')]",
+					"accountKey": {
+						"type": "SecureString",
+						"value": "[parameters('ls_adls_proyecto_final_de_azure_accountKey')]"
+					}
+				}
+			},
+			"dependsOn": []
+		},
+		{
+			"name": "[concat(parameters('factoryName'), '/ir-local-machine')]",
+			"type": "Microsoft.DataFactory/factories/integrationRuntimes",
+			"apiVersion": "2018-06-01",
+			"properties": {
+				"type": "SelfHosted",
+				"description": "Integration Rumtine que se conectará a la PC local",
+				"typeProperties": {}
+			},
+			"dependsOn": []
+		},
+		{
+			"name": "[concat(parameters('factoryName'), '/ds_adls_csv_proyecto_final_de_azure')]",
+			"type": "Microsoft.DataFactory/factories/datasets",
+			"apiVersion": "2018-06-01",
+			"properties": {
+				"linkedServiceName": {
+					"referenceName": "ls_adls_proyecto_final_de_azure",
+					"type": "LinkedServiceReference"
+				},
+				"folder": {
+					"name": "Azure Data Lake"
+				},
+				"annotations": [],
+				"type": "DelimitedText",
+				"typeProperties": {
+					"location": {
+						"type": "AzureBlobFSLocation",
+						"fileSystem": "bronze"
+					},
+					"columnDelimiter": ",",
+					"escapeChar": "\\",
+					"firstRowAsHeader": true,
+					"quoteChar": "\""
+				},
+				"schema": []
+			},
+			"dependsOn": [
+				"[concat(variables('factoryId'), '/linkedServices/ls_adls_proyecto_final_de_azure')]"
+			]
+		},
+		{
+			"name": "[concat(parameters('factoryName'), '/ls_fs_proyecto_final_de_azure')]",
+			"type": "Microsoft.DataFactory/factories/linkedServices",
+			"apiVersion": "2018-06-01",
+			"properties": {
+				"annotations": [],
+				"type": "FileServer",
+				"typeProperties": {
+					"host": "[parameters('ls_fs_proyecto_final_de_azure_properties_typeProperties_host')]",
+					"userId": "[parameters('ls_fs_proyecto_final_de_azure_properties_typeProperties_userId')]",
+					"password": {
+						"type": "SecureString",
+						"value": "[parameters('ls_fs_proyecto_final_de_azure_password')]"
+					}
+				},
+				"connectVia": {
+					"referenceName": "ir-local-machine",
+					"type": "IntegrationRuntimeReference"
+				}
+			},
+			"dependsOn": [
+				"[concat(variables('factoryId'), '/integrationRuntimes/ir-local-machine')]"
+			]
+		},
+		{
+			"name": "[concat(parameters('factoryName'), '/df_fs_csv_proyecto_final_de_azure')]",
+			"type": "Microsoft.DataFactory/factories/datasets",
+			"apiVersion": "2018-06-01",
+			"properties": {
+				"linkedServiceName": {
+					"referenceName": "ls_fs_proyecto_final_de_azure",
+					"type": "LinkedServiceReference"
+				},
+				"parameters": {
+					"file_name": {
+						"type": "String"
+					}
+				},
+				"folder": {
+					"name": "File System"
+				},
+				"annotations": [],
+				"type": "DelimitedText",
+				"typeProperties": {
+					"location": {
+						"type": "FileServerLocation",
+						"fileName": {
+							"value": "@dataset().file_name",
+							"type": "Expression"
+						}
+					},
+					"columnDelimiter": ",",
+					"escapeChar": "\\",
+					"firstRowAsHeader": true,
+					"quoteChar": "\""
+				},
+				"schema": [
+					{
+						"name": "idproducto",
+						"type": "String"
+					},
+					{
+						"name": "idmovfacturas",
+						"type": "String"
+					},
+					{
+						"name": "barcode",
+						"type": "String"
+					},
+					{
+						"name": "codigo",
+						"type": "String"
+					},
+					{
+						"name": "descrip",
+						"type": "String"
+					},
+					{
+						"name": "costo",
+						"type": "String"
+					},
+					{
+						"name": "ultcosto",
+						"type": "String"
+					},
+					{
+						"name": "descue",
+						"type": "String"
+					},
+					{
+						"name": "valorprod",
+						"type": "String"
+					},
+					{
+						"name": "cantidad",
+						"type": "String"
+					},
+					{
+						"name": "descuento",
+						"type": "String"
+					},
+					{
+						"name": "porcdesc",
+						"type": "String"
+					},
+					{
+						"name": "porciva",
+						"type": "String"
+					},
+					{
+						"name": "ivaprod",
+						"type": "String"
+					},
+					{
+						"name": "base",
+						"type": "String"
+					},
+					{
+						"name": "costoprod",
+						"type": "String"
+					},
+					{
+						"name": "retenc",
+						"type": "String"
+					},
+					{
+						"name": "numero",
+						"type": "String"
+					},
+					{
+						"name": "fecha",
+						"type": "String"
+					},
+					{
+						"name": "hora",
+						"type": "String"
+					},
+					{
+						"name": "otrosimpuestos",
+						"type": "String"
+					},
+					{
+						"name": "inclprecio",
+						"type": "String"
+					},
+					{
+						"name": "totdevprod",
+						"type": "String"
+					},
+					{
+						"name": "devuelve",
+						"type": "String"
+					},
+					{
+						"name": "nomtercero",
+						"type": "String"
+					},
+					{
+						"name": "nittercero",
+						"type": "String"
+					},
+					{
+						"name": "direccion",
+						"type": "String"
+					},
+					{
+						"name": "telefono",
+						"type": "String"
+					},
+					{
+						"name": "nomvendedor",
+						"type": "String"
+					},
+					{
+						"name": "nitvendedor",
+						"type": "String"
+					},
+					{
+						"name": "idusuario",
+						"type": "String"
+					},
+					{
+						"name": "nombrepc",
+						"type": "String"
+					},
+					{
+						"name": "impoconsumo",
+						"type": "String"
+					},
+					{
+						"name": "nomalmacen",
+						"type": "String"
+					},
+					{
+						"name": "nomcat",
+						"type": "String"
+					}
+				]
+			},
+			"dependsOn": [
+				"[concat(variables('factoryId'), '/linkedServices/ls_fs_proyecto_final_de_azure')]"
+			]
+		},
+		{
+			"name": "[concat(parameters('factoryName'), '/pl_copydata_inputs_to_adls')]",
+			"type": "Microsoft.DataFactory/factories/pipelines",
+			"apiVersion": "2018-06-01",
+			"properties": {
+				"activities": [
+					{
+						"name": "File System",
+						"description": "Esta actividad sirve para copiar archivos desde un file System hacia el Azure Datalake en su primera capa",
+						"type": "Copy",
+						"dependsOn": [],
+						"policy": {
+							"timeout": "0.12:00:00",
+							"retry": 0,
+							"retryIntervalInSeconds": 30,
+							"secureOutput": false,
+							"secureInput": false
+						},
+						"userProperties": [],
+						"typeProperties": {
+							"source": {
+								"type": "DelimitedTextSource",
+								"storeSettings": {
+									"type": "FileServerReadSettings",
+									"recursive": true,
+									"enablePartitionDiscovery": false
+								},
+								"formatSettings": {
+									"type": "DelimitedTextReadSettings"
+								}
+							},
+							"sink": {
+								"type": "DelimitedTextSink",
+								"storeSettings": {
+									"type": "AzureBlobFSWriteSettings"
+								},
+								"formatSettings": {
+									"type": "DelimitedTextWriteSettings",
+									"quoteAllText": true,
+									"fileExtension": ".txt"
+								}
+							},
+							"enableStaging": false,
+							"translator": {
+								"type": "TabularTranslator",
+								"typeConversion": true,
+								"typeConversionSettings": {
+									"allowDataTruncation": true,
+									"treatBooleanAsNumber": false
+								}
+							}
+						},
+						"inputs": [
+							{
+								"referenceName": "df_fs_csv_proyecto_final_de_azure",
+								"type": "DatasetReference",
+								"parameters": {
+									"file_name": "INFORME GENERAL Junio 2023.CSV"
+								}
+							}
+						],
+						"outputs": [
+							{
+								"referenceName": "ds_adls_csv_proyecto_final_de_azure",
+								"type": "DatasetReference",
+								"parameters": {}
+							}
+						]
+					}
+				],
+				"policy": {
+					"elapsedTimeMetric": {},
+					"cancelAfter": {}
+				},
+				"annotations": [],
+				"lastPublishTime": "2023-08-23T03:08:07Z"
+			},
+			"dependsOn": [
+				"[concat(variables('factoryId'), '/datasets/df_fs_csv_proyecto_final_de_azure')]",
+				"[concat(variables('factoryId'), '/datasets/ds_adls_csv_proyecto_final_de_azure')]"
+			]
+		}
+	]
+}
