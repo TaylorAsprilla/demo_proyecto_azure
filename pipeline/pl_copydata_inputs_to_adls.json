@@ -3,7 +3,7 @@
 	"properties": {
 		"activities": [
 			{
-				"name": "File System",
+				"name": "File System to bronze",
 				"description": "Esta actividad sirve para copiar archivos desde un file System hacia el Azure Datalake en su primera capa",
 				"type": "Copy",
 				"dependsOn": [],
