@@ -1,0 +1,61 @@
+{
+	"name": "dataflow1",
+	"properties": {
+		"type": "MappingDataFlow",
+		"typeProperties": {
+			"sources": [
+				{
+					"dataset": {
+						"referenceName": "df_fs_csv_proyecto_final_de_azure",
+						"type": "DatasetReference"
+					},
+					"name": "cargadedatos"
+				}
+			],
+			"sinks": [],
+			"transformations": [],
+			"scriptLines": [
+				"source(output(",
+				"          idproducto as string,",
+				"          idmovfacturas as string,",
+				"          barcode as string,",
+				"          codigo as string,",
+				"          descrip as string,",
+				"          costo as string,",
+				"          ultcosto as string,",
+				"          descue as string,",
+				"          valorprod as string,",
+				"          cantidad as string,",
+				"          descuento as string,",
+				"          porcdesc as string,",
+				"          porciva as string,",
+				"          ivaprod as string,",
+				"          base as string,",
+				"          costoprod as string,",
+				"          retenc as string,",
+				"          numero as string,",
+				"          fecha as string,",
+				"          hora as string,",
+				"          otrosimpuestos as string,",
+				"          inclprecio as string,",
+				"          totdevprod as string,",
+				"          devuelve as string,",
+				"          nomtercero as string,",
+				"          nittercero as string,",
+				"          direccion as string,",
+				"          telefono as string,",
+				"          nomvendedor as string,",
+				"          nitvendedor as string,",
+				"          idusuario as string,",
+				"          nombrepc as string,",
+				"          impoconsumo as string,",
+				"          nomalmacen as string,",
+				"          nomcat as string",
+				"     ),",
+				"     allowSchemaDrift: true,",
+				"     validateSchema: false,",
+				"     ignoreNoFilesFound: false) ~> cargadedatos"
+			]
+		}
+	}
+}
